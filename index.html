@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Trending Analysis Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        header {
+            background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #CC0000;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 3px solid #FF0000;
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            color: #444;
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #FF0000;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .stat-card h4 {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CC0000;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: white;
+        }
+
+        th {
+            background: #FF0000;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .insights-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .insights-list li {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: #f8f9fa;
+            border-left: 4px solid #FF0000;
+            border-radius: 4px;
+        }
+
+        .insights-list li strong {
+            color: #CC0000;
+        }
+
+        .takeaway {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .visualization-placeholder {
+            background: #e9ecef;
+            border: 2px dashed #adb5bd;
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            color: #6c757d;
+            margin: 1rem 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: #333;
+            color: white;
+            margin-top: 2rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: #FF0000;
+            color: white;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin: 0.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📊 YouTube Trending Analysis</h1>
+        <p>Data-Driven Insights from 161,470 Trending Videos</p>
+    </header>
+
+    <div class="container">
+        <!-- Dataset Overview -->
+        <section class="section">
+            <h2>📈 Dataset Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Total Videos Analyzed</h4>
+                    <div class="value">161,470</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Date Range</h4>
+                    <div class="value" style="font-size: 1.2rem;">2006 - 2018</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Unique Categories</h4>
+                    <div class="value">18</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Average Views</h4>
+                    <div class="value">2.42M</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Top Performing Categories -->
+        <section class="section">
+            <h2>🏆 Top Performing Categories</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Avg Views</th>
+                        <th>Avg Likes</th>
+                        <th>Video Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Music</strong></td>
+                        <td>8.22M</td>
+                        <td>215K</td>
+                        <td>27,903</td>
+                    </tr>
+                    <tr>
+                        <td>Film & Animation</td>
+                        <td>2.13M</td>
+                        <td>45.5K</td>
+                        <td>9,139</td>
+                    </tr>
+                    <tr>
+                        <td>Nonprofits & Activism</td>
+                        <td>2.08M</td>
+                        <td>166K</td>
+                        <td>335</td>
+                    </tr>
+                    <tr>
+                        <td>Entertainment</td>
+                        <td>1.60M</td>
+                        <td>42.0K</td>
+                        <td>42,358</td>
+                    </tr>
+                    <tr>
+                        <td>Science & Technology</td>
+                        <td>1.44M</td>
+                        <td>36.0K</td>
+                        <td>4,876</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="visualization-placeholder">
+                <p>📊 Visualization: Number of Trending Videos per Category</p>
+                <p><em>Bar chart showing category distribution</em></p>
+            </div>
+        </section>
+
+        <!-- Engagement Metrics -->
+        <section class="section">
+            <h2>💬 Engagement Metrics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Average Like Ratio</h4>
+                    <div class="value">3.64%</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Average Comment Ratio</h4>
+                    <div class="value">0.52%</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Average Dislike Ratio</h4>
+                    <div class="value">0.16%</div>
+                </div>
+            </div>
+
+            <h3>Most Engaging Categories by Like Ratio</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Like Ratio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Comedy</td>
+                        <td><strong>5.23%</strong></td>
+                    </tr>
+                    <tr>
+                        <td>How-to & Style</td>
+                        <td><strong>5.09%</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Gaming</td>
+                        <td><strong>4.77%</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Education</td>
+                        <td><strong>4.66%</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Music</td>
+                        <td><strong>4.51%</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="visualization-placeholder">
+                <p>📊 Visualization: Views vs Likes (Log Scale)</p>
+                <p><em>Scatter plot showing positive correlation</em></p>
+            </div>
+
+            <div class="visualization-placeholder">
+                <p>📊 Visualization: Average Engagement Ratios by Category</p>
+                <p><em>Bar chart comparing like and comment ratios</em></p>
+            </div>
+        </section>
+
+        <!-- Trending Speed -->
+        <section class="section">
+            <h2>⚡ Trending Speed Analysis</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Average Days to Trend</h4>
+                    <div class="value">14.7</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Median Days to Trend</h4>
+                    <div class="value">3</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Fastest Possible</h4>
+                    <div class="value">0 days</div>
+                </div>
+            </div>
+
+            <h3>Fastest Trending Categories</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Avg Days to Trend</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Movies</td>
+                        <td>2.0 days</td>
+                    </tr>
+                    <tr>
+                        <td>Shows</td>
+                        <td>3.7 days</td>
+                    </tr>
+                    <tr>
+                        <td>Trailers</td>
+                        <td>4.5 days</td>
+                    </tr>
+                    <tr>
+                        <td>News & Politics</td>
+                        <td>6.4 days</td>
+                    </tr>
+                    <tr>
+                        <td>How-to & Style</td>
+                        <td>6.6 days</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="visualization-placeholder">
+                <p>📊 Visualization: Days to Trend by Category</p>
+                <p><em>Box plot showing distribution across categories</em></p>
+            </div>
+        </section>
+
+        <!-- Title & Tag Insights -->
+        <section class="section">
+            <h2>🏷️ Title & Tag Insights</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Average Title Length</h4>
+                    <div class="value">54</div>
+                    <p style="margin-top: 0.5rem; color: #666;">characters</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Average Tags per Video</h4>
+                    <div class="value">18</div>
+                </div>
+                <div class="stat-card">
+                    <h4>ALL CAPS Titles</h4>
+                    <div class="value">8.8%</div>
+                    <p style="margin-top: 0.5rem; color: #666;">of videos</p>
+                </div>
+            </div>
+
+            <h3>Correlation with Views</h3>
+            <ul class="insights-list">
+                <li><strong>Title length vs views:</strong> -0.055 (weak negative correlation)</li>
+                <li><strong>Tag count vs views:</strong> -0.009 (minimal correlation)</li>
+            </ul>
+
+            <div class="visualization-placeholder">
+                <p>📊 Visualization: Title Length vs Views</p>
+                <p><em>Scatter plot on log scale</em></p>
+            </div>
+
+            <div class="visualization-placeholder">
+                <p>📊 Visualization: Tag Count vs Views</p>
+                <p><em>Box plot showing views distribution by tag count</em></p>
+            </div>
+        </section>
+
+        <!-- Publishing Day Analysis -->
+        <section class="section">
+            <h2>📅 Publishing Day Impact</h2>
+            <p>Publishing day shows measurable impact on average view counts. Most trending videos were published before the weekend, particularly on Thursday and Friday.</p>
+            
+            <div class="visualization-placeholder">
+                <p>📊 Visualization: Average Views by Publish Day</p>
+                <p><em>Bar chart showing weekly pattern</em></p>
+            </div>
+
+            <div class="takeaway">
+                <strong>💡 Key Insight:</strong> Planning to publish content before the weekend can improve visibility and trending potential.
+            </div>
+        </section>
+
+        <!-- Views Distribution -->
+        <section class="section">
+            <h2>📊 Views Distribution</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Average Views</h4>
+                    <div class="value">2.42M</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Median Views</h4>
+                    <div class="value">384K</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Maximum Views</h4>
+                    <div class="value">424.5M</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Minimum Views</h4>
+                    <div class="value">223</div>
+                </div>
+            </div>
+
+            <h3>Most Viewed Video</h3>
+            <div class="takeaway" style="background: #d4edda; border-color: #28a745;">
+                <p><strong>Title:</strong> <em>Nicky Jam x J. Balvin – X (EQUIS)</em></p>
+                <p><strong>Category:</strong> Music</p>
+                <p><strong>Views:</strong> 424.5M | <strong>Likes:</strong> 2.8M | <strong>Days to trend:</strong> 36</p>
+            </div>
+        </section>
+
+        <!-- Key Insights -->
+        <section class="section">
+            <h2>🔍 Key Insights From the Analysis</h2>
+
+            <h3>1. Category Performance</h3>
+            <ul class="insights-list">
+                <li>Entertainment, Music, and Comedy are the top three trending categories</li>
+                <li>These categories have the highest number of videos and average views</li>
+                <li>People and Blogs, News and Politics, How-to and Sports videos come after these respectively</li>
+            </ul>
+
+            <h3>2. Engagement Patterns</h3>
+            <ul class="insights-list">
+                <li>Videos with higher like ratios usually perform better with higher views</li>
+                <li>Comment engagement varies by category</li>
+                <li>Videos with engagements such as likes/dislikes and comments disabled trend less frequently</li>
+            </ul>
+
+            <h3>3. Trending Timeline</h3>
+            <ul class="insights-list">
+                <li>Videos typically trend within two weeks after publishing</li>
+                <li>Some categories trend significantly faster than others</li>
+                <li>Publishing timing may influence how quickly a video trends</li>
+                <li>Early engagement seems very important for trending</li>
+            </ul>
+
+            <h3>4. Content Optimization</h3>
+            <ul class="insights-list">
+                <li><strong>Title Length:</strong> Shorter sized titles perform better than long ones</li>
+                <li><strong>All Caps Titles:</strong> A noticeable portion of trending videos use all caps titles</li>
+                <li><strong>Tags:</strong> Most trending videos use less than 20 tags</li>
+                <li>Excessive tagging does not consistently improve performance</li>
+            </ul>
+
+            <h3>5. View Distribution</h3>
+            <ul class="insights-list">
+                <li>View counts are highly skewed</li>
+                <li>A small fraction of videos achieve extremely high view counts</li>
+                <li>Consistent content quality is more important than relying on viral outliers</li>
+            </ul>
+
+            <h3>6. Days of the Week</h3>
+            <ul class="insights-list">
+                <li>Publishing day shows a measurable impact on average view counts</li>
+                <li>Most trending videos were published before weekend on Thursday and Friday</li>
+                <li>Planning to publish content before weekend can improve visibility</li>
+            </ul>
+        </section>
+
+        <!-- Final Takeaways -->
+        <section class="section">
+            <h2>🎯 Final Takeaways & Recommendations</h2>
+
+            <div class="takeaway">
+                <h4>1. Categories</h4>
+                <p>While you typically make videos on topics you enjoy, mixing elements can help. For example, comedy is a category that can be integrated into otherwise unrelated videos. Whether educational or informational, combining content with well-performing categories can boost performance.</p>
+            </div>
+
+            <div class="takeaway">
+                <h4>2. Titles</h4>
+                <p>Keep titles clean, short, and informative. Avoid excessive use of All Caps.</p>
+            </div>
+
+            <div class="takeaway">
+                <h4>3. Tags</h4>
+                <p>Use the recommended number of about 20 highly relevant tags instead of using all the tags imaginable.</p>
+            </div>
+
+            <div class="takeaway">
+                <h4>4. Engagement and Momentum</h4>
+                <p>Strong engagement immediately after publishing increases the chances of videos trending.</p>
+            </div>
+
+            <div class="takeaway">
+                <h4>5. Quality Over Quantity</h4>
+                <p>High performing videos consistently show strong engagement ratios.</p>
+            </div>
+
+            <div class="takeaway">
+                <h4>6. Thumbnails</h4>
+                <p>While this analysis focused on titles and metadata, thumbnails also play a very important role in video performance.</p>
+            </div>
+        </section>
+
+        <!-- Important Observations -->
+        <section class="section">
+            <h2>📌 Important Observations</h2>
+            <ul class="insights-list">
+                <li>Views, likes, and comments show a <strong>strong positive correlation</strong></li>
+                <li>Content category <strong>influences trending potential</strong></li>
+                <li>Time to trend highlights the importance of <strong>early performance</strong></li>
+                <li>Engagement ratios are <strong>more informative than raw view counts</strong> alone</li>
+            </ul>
+
+            <div class="takeaway" style="background: #cfe2ff; border-color: #0d6efd;">
+                <h4>🎯 Key Takeaway</h4>
+                <p><strong>Music dominates reach, Comedy leads engagement, and Movies & trailers trend fastest.</strong> Metadata has minimal impact on performance, while views are highly skewed toward top performers.</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 YouTube Trending Analysis | Data Science Project</p>
+        <p style="margin-top: 0.5rem; opacity: 0.8;">Analysis based on 161,470 trending videos from 2006-2018</p>
+    </footer>
+</body>
+</html>
